@@ -13,6 +13,30 @@ const { lang } = Astro.params;
 const locale = lang || 'en';
 const t = (key: string) => getText(locale, key);
 const contact = getLangContent(locale, 'contact');
+
+// Helper function to get product name in current language
+function getProductName(product: any) {
+  if (locale.startsWith('zh')) {
+    return product.nameZh || product.name;
+  } else if (locale === 'ja' && product.nameJa) {
+    return product.nameJa;
+  } else if (locale === 'ko' && product.nameKo) {
+    return product.nameKo;
+  }
+  return product.name;
+}
+
+// Helper function to get product description in current language
+function getProductDescription(product: any) {
+  if (locale === 'zh-CN' || locale === 'zh-TW') {
+    return product.descriptionZh || product.description;
+  } else if (locale === 'ja') {
+    return product.descriptionJa || product.descriptionZh || product.description;
+  } else if (locale === 'ko') {
+    return product.descriptionZh || product.description;
+  }
+  return product.description;
+}
 ---
 
 <Layout title={`${t('products')} | Alin Handcraft`} lang={locale}>
@@ -38,13 +62,13 @@ const contact = getLangContent(locale, 'contact');
           {products.map((product, index) => (
             <div class="product-card">
               <div class="product-image">
-                <img src={product.image} alt={locale === 'zh-CN' ? product.nameZh : product.name} />
+                <img src={product.image} alt={getProductName(product)} />
                 {product.isDigital && <span class="badge digital">Digital</span>}
               </div>
               <div class="product-info">
-                <h3>{locale === 'zh-CN' ? product.nameZh : product.name}</h3>
+                <h3>{getProductName(product)}</h3>
                 <p class="description">
-                  {(locale === 'zh-CN' ? product.descriptionZh : product.description).slice(0, 120)}...
+                  {getProductDescription(product).slice(0, 120)}...
                 </p>
                 <p class="price">${product.price} {product.currency}</p>
                 {product.sizes && (

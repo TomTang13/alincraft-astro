@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product | Alincraft</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'PingFang SC', sans-serif; background: #FDFBF7; color: #4A4A4A; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 24px; }
+        
+        .back { display: inline-block; margin-bottom: 32px; color: #888; text-decoration: none; font-size: 14px; }
+        .back:hover { color: #4A4A4A; }
+        
+        .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+        .product-image img { width: 100%; border-radius: 4px; }
+        
+        .product-info h1 { font-size: 28px; font-weight: 400; margin-bottom: 16px; }
+        .price { font-size: 24px; color: #888; margin-bottom: 32px; }
+        .description { font-size: 15px; line-height: 1.8; color: #555; margin-bottom: 40px; }
+        
+        .contact-btn { 
+            display: inline-block; padding: 16px 48px; background: #4A4A4A; 
+            color: #FFF; text-decoration: none; border-radius: 4px; font-size: 14px;
+        }
+        .contact-btn:hover { background: #333; }
+        
+        .lang-switch { position: fixed; top: 20px; right: 24px; display: flex; gap: 8px; }
+        .lang-btn { 
+            padding: 6px 14px; border: 1px solid #DDD; background: #FDFBF7; 
+            cursor: pointer; border-radius: 20px; font-size: 12px;
+        }
+        .lang-btn.active { background: #4A4A4A; color: #FFF; border-color: #4A4A4A; }
+
+        @media (max-width: 700px) {
+            .product-layout { grid-template-columns: 1fr; gap: 32px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLang('zh')">中文</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+
+    <div class="container">
+        <a href="/index.html" class="back">← Back to Shop</a>
+        
+        <div class="product-layout">
+            <div class="product-image">
+                <img id="mainImage" src="" alt="">
+            </div>
+            <div class="product-info">
+                <h1 id="productName"></h1>
+                <p class="price" id="productPrice"></p>
+                <div class="description" id="productDesc"></div>
+                <a href="https://wa.me/8613671887113" class="contact-btn" data-lang="zh">联系购买</a>
+                <a href="https://wa.me/8613671887113" class="contact-btn" data-lang="en" style="display:none">Contact to Buy</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://crwusuqbvhjgxdiujyox.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNyd3VzdXFidmhqZ3hkaXVqeW94Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MzAzNzksImV4cCI6MjA4NTIwNjM3OX0.z6ZQ6LQvYzQfY7x9y8F-qRTIRhIR_DSfJAQ-S6VP8hg';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        let currentLang = localStorage.getItem('lang') || 'zh';
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                el.style.display = el.dataset.lang === lang ? '' : 'none';
+            });
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase().includes(lang));
+            });
+            renderProduct();
+        }
+
+        function renderProduct() {
+            const product = window.currentProduct;
+            if (!product) return;
+            
+            document.getElementById('mainImage').src = product.image_url || '/images/placeholder.jpg';
+            document.getElementById('productName').textContent = currentLang === 'zh' ? product.name_zh : product.name_en;
+            document.getElementById('productPrice').textContent = `${product.currency} ${parseFloat(product.price).toFixed(2)}`;
+            document.getElementById('productDesc').textContent = currentLang === 'zh' ? product.description_zh : product.description_en;
+            document.title = `${currentLang === 'zh' ? product.name_zh : product.name_en} | Alincraft`;
+        }
+
+        async function loadProduct() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            
+            const { data, error } = await supabase
+                .from('products')
+                .select('*')
+                .eq('id', id)
+                .single();
+            
+            if (data) {
+                window.currentProduct = data;
+                renderProduct();
+            }
+        }
+
+        setLang(currentLang);
+        loadProduct();
+    </script>
+</body>
+</html>

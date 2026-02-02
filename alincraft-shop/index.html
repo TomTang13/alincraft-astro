@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alincraft Shop | Amigurumi Handmade</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'PingFang SC', sans-serif; background: #FDFBF7; color: #4A4A4A; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        
+        header { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; }
+        .logo { font-size: 24px; font-weight: 300; letter-spacing: 4px; }
+        nav a { margin-left: 32px; color: #4A4A4A; text-decoration: none; font-size: 14px; }
+        
+        .hero { text-align: center; padding: 80px 0; }
+        .hero h1 { font-size: 36px; font-weight: 300; margin-bottom: 16px; }
+        .hero p { color: #888; letter-spacing: 2px; }
+        
+        .filters { display: flex; justify-content: center; gap: 16px; margin-bottom: 48px; flex-wrap: wrap; }
+        .filter-btn { 
+            padding: 8px 24px; border: 1px solid #DDD; background: none; 
+            cursor: pointer; border-radius: 20px; font-size: 13px; transition: 0.3s;
+        }
+        .filter-btn.active, .filter-btn:hover { background: #4A4A4A; color: #FFF; border-color: #4A4A4A; }
+        
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; padding-bottom: 80px; }
+        .product-card { text-decoration: none; color: inherit; display: block; }
+        .product-card img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 4px; margin-bottom: 16px; }
+        .product-card h3 { font-size: 16px; font-weight: 400; margin-bottom: 8px; }
+        .product-card .price { font-size: 14px; color: #888; }
+        
+        .lang-switch { position: fixed; top: 20px; right: 24px; display: flex; gap: 8px; z-index: 100; }
+        .lang-btn { 
+            padding: 6px 14px; border: 1px solid #DDD; background: #FDFBF7; 
+            cursor: pointer; border-radius: 20px; font-size: 12px;
+        }
+        .lang-btn.active { background: #4A4A4A; color: #FFF; border-color: #4A4A4A; }
+
+        footer { text-align: center; padding: 60px 0; border-top: 1px solid #EEE; font-size: 12px; color: #AAA; }
+        
+        @media (max-width: 600px) {
+            .hero { padding: 40px 0; }
+            .hero h1 { font-size: 24px; }
+            .lang-switch { top: 10px; right: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLang('zh')">中文</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">ALINCRAFT</div>
+            <nav>
+                <a href="#" onclick="showAll()">Shop</a>
+                <a href="/admin">Admin</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <h1 data-lang="zh">手工编织玩偶</h1>
+            <h1 data-lang="en" style="display:none">Handcrafted Amigurumi</h1>
+            <p data-lang="zh">每一件都是独一无二的心意</p>
+            <p data-lang="en" style="display:none">Each piece is uniquely crafted with love</p>
+        </section>
+
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterCategory('all')" data-lang="zh">全部</button>
+            <button class="filter-btn" onclick="filterCategory('all')" data-lang="en" style="display:none">All</button>
+        </div>
+
+        <div class="products-grid" id="products"></div>
+
+        <footer>
+            <p>© 2026 Alincraft Shop</p>
+        </footer>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://crwusuqbvhjgxdiujyox.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNyd3VzdXFidmhqZ3hkaXVqeW94Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2MzAzNzksImV4cCI6MjA4NTIwNjM3OX0.z6ZQ6LQvYzQfY7x9y8F-qRTIRhIR_DSfJAQ-S6VP8hg';
+        
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        let products = [];
+        let currentLang = localStorage.getItem('lang') || 'zh';
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                el.style.display = el.dataset.lang === lang ? '' : 'none';
+            });
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase().includes(lang));
+            });
+            renderProducts();
+        }
+
+        function filterCategory(cat) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderProducts(cat);
+        }
+
+        function showAll() { filterCategory('all'); }
+
+        function renderProducts(category = 'all') {
+            const container = document.getElementById('products');
+            const filtered = category === 'all' ? products : products.filter(p => p.category === category);
+            
+            container.innerHTML = filtered.map(p => `
+                <a href="/product.html?id=${p.id}" class="product-card">
+                    <img src="${p.image_url || '/images/placeholder.jpg'}" alt="${currentLang === 'zh' ? p.name_zh : p.name_en}">
+                    <h3>${currentLang === 'zh' ? p.name_zh : p.name_en}</h3>
+                    <p class="price">${p.currency} ${parseFloat(p.price).toFixed(2)}</p>
+                </a>
+            `).join('');
+        }
+
+        async function loadProducts() {
+            const { data, error } = await supabase
+                .from('products')
+                .select('*')
+                .eq('is_active', true)
+                .order('sort_order', { ascending: true });
+            
+            if (data) {
+                products = data;
+                // Build category filters
+                const categories = [...new Set(products.map(p => p.category).filter(Boolean))];
+                const filterContainer = document.querySelector('.filters');
+                categories.forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = 'filter-btn';
+                    btn.textContent = cat;
+                    btn.onclick = () => filterCategory(cat);
+                    filterContainer.appendChild(btn);
+                });
+                renderProducts();
+            }
+        }
+
+        setLang(currentLang);
+        loadProducts();
+    </script>
+</body>
+</html>

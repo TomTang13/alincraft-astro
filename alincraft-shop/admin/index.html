@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Alincraft</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'PingFang SC', sans-serif; background: #F5F5F5; color: #4A4A4A; }
+        
+        .login-container { 
+            display: flex; align-items: center; justify-content: center; 
+            min-height: 100vh; padding: 24px;
+        }
+        .login-box { 
+            background: #FFF; padding: 48px; border-radius: 8px; 
+            width: 100%; max-width: 400px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .login-box h1 { font-size: 24px; font-weight: 400; margin-bottom: 32px; text-align: center; }
+        
+        .form-group { margin-bottom: 24px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 14px; color: #666; }
+        .form-group input { 
+            width: 100%; padding: 12px 16px; border: 1px solid #DDD; 
+            border-radius: 4px; font-size: 14px;
+        }
+        .form-group input:focus { outline: none; border-color: #4A4A4A; }
+        
+        .btn { 
+            width: 100%; padding: 14px; background: #4A4A4A; 
+            color: #FFF; border: none; border-radius: 4px; 
+            cursor: pointer; font-size: 14px; transition: 0.3s;
+        }
+        .btn:hover { background: #333; }
+        .error { color: #E74C3C; font-size: 13px; margin-top: 16px; text-align: center; }
+
+        /* Dashboard */
+        .dashboard { display: none; }
+        .header { 
+            background: #FFF; padding: 16px 24px; display: flex; 
+            justify-content: space-between; align-items: center; 
+            border-bottom: 1px solid #EEE;
+        }
+        .header h1 { font-size: 18px; font-weight: 400; }
+        .logout-btn { 
+            padding: 8px 20px; background: none; border: 1px solid #DDD; 
+            cursor: pointer; border-radius: 4px; font-size: 13px;
+        }
+        
+        .content { padding: 24px; max-width: 1200px; margin: 0 auto; }
+        .toolbar { display: flex; justify-content: space-between; margin-bottom: 24px; }
+        .add-btn { 
+            padding: 10px 24px; background: #4A4A4A; color: #FFF; 
+            border: none; border-radius: 4px; cursor: pointer; font-size: 14px;
+        }
+        
+        .product-table { 
+            width: 100%; background: #FFF; border-radius: 8px; 
+            overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+        .product-table th, .product-table td { 
+            padding: 16px; text-align: left; border-bottom: 1px solid #EEE;
+        }
+        .product-table th { background: #FAFAFA; font-weight: 400; font-size: 13px; color: #888; }
+        .product-table img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
+        .action-btn { 
+            padding: 6px 12px; margin-right: 8px; border: 1px solid #DDD; 
+            background: #FFF; cursor: pointer; border-radius: 4px; font-size: 12px;
+        }
+        .action-btn:hover { background: #F5F5F5; }
+        .status-toggle { cursor: pointer; }
+
+        /* Modal */
+        .modal { 
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
+            background: rgba(0,0,0,0.5); align-items: center; justify-content: center;
+        }
+        .modal.show { display: flex; }
+        .modal-content { 
+            background: #FFF; padding: 32px; border-radius: 8px; 
+            width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto;
+        }
+        .modal-header { display: flex; justify-content: space-between; margin-bottom: 24px; }
+        .modal-header h2 { font-size: 18px; font-weight: 400; }
+        .close-btn { cursor: pointer; font-size: 24px; }
+        
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        textarea { 
+            width: 100%; padding: 12px; border: 1px solid #DDD; 
+            border-radius: 4px; font-size: 14px; min-height: 100px; resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login -->
+    <div class="login-container" id="loginPage">
+        <div class="login-box">
+            <h1>Admin Login</h1>
+            <form id="loginForm" method="POST">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <p class="error" id="loginError"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <div class="header">
+            <h1>Alincraft Admin</h1>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+        <div class="content">
+            <div class="toolbar">
+                <h2>Products</h2>
+                <button class="add-btn" onclick="openModal()">+ Add Product</button>
+            </div>
+            <table class="product-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name (ZH/EN)</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="productList"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Product</h2>
+                <span class="close-btn" onclick="closeModal()">×</span>
+            </div>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name (Chinese)</label>
+                        <input type="text" id="nameZh" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Name (English)</label>
+                        <input type="text" id="nameEn" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Price (USD)</label>
+                        <input type="number" id="price" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <input type="text" id="category" placeholder="e.g., Dogs, Cats">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Image URL</label>
+                    <input type="url" id="imageUrl" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Description (Chinese)</label>
+                    <textarea id="descZh"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Description (English)</label>
+                    <textarea id="descEn"></textarea>
+                </div>
+                <button type="submit" class="btn">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://crwusuqbvhjgxdiujyox.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNyd3VzdXFidmhqZ3hkaXVqeW94Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTYzMDM3OSwiZXhwIjoyMDg1MjA2Mzc5fQ.oiAMy_7DcnWLVw61S4j-zRTIRhIR_DSfJAQ-S6VP8hg';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        let isLoggedIn = sessionStorage.getItem('adminToken');
+
+        if (isLoggedIn) {
+            showDashboard();
+        }
+
+        document.getElementById('loginForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const username = e.target.username.value;
+            const password = e.target.password.value;
+
+            const { data, error } = await supabase
+                .from('admin_users')
+                .select('password_hash')
+                .eq('username', username)
+                .single();
+
+            console.log('Query result:', data, error);
+            
+            if (data && data.password_hash === password) {
+                console.log('Login success');
+                sessionStorage.setItem('adminToken', 'true');
+                showDashboard();
+            } else {
+                console.log('Login failed');
+                document.getElementById('loginError').textContent = 'Invalid credentials';
+            }
+        };
+
+        function showDashboard() {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            loadProducts();
+        }
+
+        function logout() {
+            sessionStorage.removeItem('adminToken');
+            location.reload();
+        }
+
+        async function loadProducts() {
+            const { data } = await supabase
+                .from('products')
+                .select('*')
+                .order('sort_order', { ascending: true });
+            
+            document.getElementById('productList').innerHTML = data.map(p => `
+                <tr>
+                    <td><img src="${p.image_url || '/images/placeholder.jpg'}" alt=""></td>
+                    <td>${p.name_zh}<br><small style="color:#888">${p.name_en}</small></td>
+                    <td>$${parseFloat(p.price).toFixed(2)}</td>
+                    <td>${p.category || '-'}</td>
+                    <td>
+                        <span class="status-toggle" onclick="toggleStatus(${p.id}, ${!p.is_active})">
+                            ${p.is_active ? '✓ Active' : '○ Inactive'}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="action-btn" onclick="editProduct(${p.id})">Edit</button>
+                        <button class="action-btn" onclick="deleteProduct(${p.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openModal(id = null) {
+            document.getElementById('modalTitle').textContent = id ? 'Edit Product' : 'Add Product';
+            document.getElementById('productId').value = id || '';
+            document.getElementById('productForm').reset();
+            if (id) loadProductData(id);
+            document.getElementById('productModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').classList.remove('show');
+        }
+
+        async function loadProductData(id) {
+            const { data } = await supabase.from('products').select('*').eq('id', id).single();
+            if (data) {
+                document.getElementById('nameZh').value = data.name_zh;
+                document.getElementById('nameEn').value = data.name_en;
+                document.getElementById('price').value = data.price;
+                document.getElementById('category').value = data.category || '';
+                document.getElementById('imageUrl').value = data.image_url || '';
+                document.getElementById('descZh').value = data.description_zh || '';
+                document.getElementById('descEn').value = data.description_en || '';
+            }
+        }
+
+        document.getElementById('productForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('productId').value;
+            const product = {
+                name_zh: document.getElementById('nameZh').value,
+                name_en: document.getElementById('nameEn').value,
+                price: parseFloat(document.getElementById('price').value),
+                category: document.getElementById('category').value,
+                image_url: document.getElementById('imageUrl').value,
+                description_zh: document.getElementById('descZh').value,
+                description_en: document.getElementById('descEn').value,
+                updated_at: new Date().toISOString()
+            };
+
+            if (id) {
+                await supabase.from('products').update(product).eq('id', id);
+            } else {
+                await supabase.from('products').insert(product);
+            }
+
+            closeModal();
+            loadProducts();
+        };
+
+        async function toggleStatus(id, status) {
+            await supabase.from('products').update({ is_active: status, updated_at: new Date().toISOString() }).eq('id', id);
+            loadProducts();
+        }
+
+        async function deleteProduct(id) {
+            if (confirm('Delete this product?')) {
+                await supabase.from('products').delete().eq('id', id);
+                loadProducts();
+            }
+        }
+
+        function editProduct(id) { openModal(id); }
+    </script>
+</body>
+</html>

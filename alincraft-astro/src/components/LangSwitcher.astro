@@ -11,12 +11,12 @@ const locales = Object.keys(langNames);
 
 <div class="lang-switcher">
   <select 
-    onchange="window.location.href = this.value" 
+    id="lang-select" 
     class="lang-select"
   >
     {locales.map(locale => (
       <option 
-        value={locale === 'en' ? '/en/' : `/${locale}/`}
+        value={locale}
         selected={currentLocale === locale}
       >
         {langNames[locale]}
@@ -24,6 +24,45 @@ const locales = Object.keys(langNames);
     ))}
   </select>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const select = document.getElementById('lang-select');
+    if (!select) return;
+    
+    select.addEventListener('change', (e) => {
+      const newLocale = e.target.value;
+      switchToLanguage(newLocale);
+    });
+  });
+
+  function switchToLanguage(newLocale) {
+    const path = window.location.pathname;
+    
+    // 直接从URL提取当前语言
+    const match = path.match(/^\/([a-z]{2}(-[A-Z]{2})?)\//);
+    let currentLang = match ? match[1] : 'en';
+    let cleanPath = path;
+    
+    // 去掉当前语言前缀
+    if (currentLang === 'en') {
+      cleanPath = path.replace(/^\/en\//, '/');
+    } else {
+      cleanPath = path.replace(/^\/[a-z]{2}(-[A-Z]{2})?\//, '/');
+    }
+    
+    // 构建新路径
+    let newPath;
+    if (newLocale === 'en') {
+      newPath = cleanPath === '/' ? '/' : `/en${cleanPath}`;
+    } else {
+      newPath = `/${newLocale}${cleanPath}`;
+    }
+    
+    // 跳转
+    window.location.href = newPath;
+  }
+</script>
 
 <style>
   .lang-switcher {

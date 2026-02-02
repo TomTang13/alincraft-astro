@@ -50,9 +50,9 @@ export const translations = {
     selectSize: 'Please select size',
     selectColor: 'Please select color',
     selected: 'Selected',
-    priceTBD: 'Price TBD',
+    priceTBD: 'Custom Quote',
     contactForQuote: 'Contact for quote',
-    basePrice: 'Base Price'
+    basePrice: 'Starting from'
   },
   'zh-CN': {
     logo: '阿琳手作',
@@ -105,7 +105,7 @@ export const translations = {
     selectSize: '请选择尺寸',
     selectColor: '请选择颜色',
     selected: '已选择',
-    priceTBD: '价格待定',
+    priceTBD: '定制报价｜根据需求单独确认',
     contactForQuote: '联系获取报价',
     basePrice: '基础价格'
   },
@@ -113,6 +113,9 @@ export const translations = {
     logo: '阿琳手作',
     tagline: '手作不急，陪你很久',
     nav: { shop: '商店' },
+    products: '商品展示',
+    productsTagline: '手工定制，匠心獨運',
+    viewDetails: '查看詳情',
     sections: {
       story: { title: '品牌故事', content: [
         '這裡是阿琳手作，一個始於「慢」，忠於「專注」的地方。',
@@ -149,7 +152,69 @@ export const translations = {
         etsy: 'Etsy: amigucustom.etsy.com →'
       }
     },
-    footer: '阿琳手作工作室 © 2026'
+    footer: '阿琳手作工作室 © 2026',
+    whyChooseThis: '產品特點',
+    howToOrder: '訂購方式',
+    digitalDownload: '數字下載',
+    moreImages: '更多圖片',
+    selectSize: '請選擇尺寸',
+    selectColor: '請選擇顏色',
+    selected: '已選擇',
+    priceTBD: '定制報價｜根據需求單獨確認',
+    contactForQuote: '聯繫獲取報價',
+    basePrice: '基礎價格'
+  },
+  'ja': {
+    logo: 'Alin Handcraft',
+    tagline: 'ゆっくりと、あなたのそばに',
+    nav: { shop: 'ショップ' },
+    products: '商品一覧',
+    productsTagline: '手作りによる愛',
+    viewDetails: '詳細を見る',
+    sections: {
+      story: { title: '私たちのストーリー', content: [
+        'ここは「スロウ」から生まれ、「フォーカス」に忠実なAlin Handcraftです。',
+        '主宰者のAlinは潮汕の故郷で静かに育った女性です。',
+        '80代になる祖父は、まだ潮汕の珠刺繍を続けています。',
+        'その沈黙の確信が、彼女に早い段階で教えてくれました：手作りは技術の積み重ねではなく、心を安住させる方法だと。',
+        'この家伝の静けさを携え、Alinは編み物に出会いました。',
+        '今日、このスタジオは上海に上陸しました。この効率を重視する都市で、Alinは「反効率」の角落を提供したいと考えています。',
+        '真の温もりは、どれだけ早く作るかではなく、どれだけ長く寄り添うかです。'
+      ]},
+      works: { title: '作品紹介' },
+      memorial: { 
+        title: 'ペットメモリアルトイ',
+        content: [
+          '愛するペットが旅立った時、彼らが残した温かい思い出は永遠に保存されるべきです。',
+          'Alin Handcraftはカスタムペットメモリアルトイを提供します。',
+          'すべてのメモリアルトイは愛と思い出を載せており、自分への慰め，也是家人への温かい贈り物です。'
+        ],
+        cta: 'お問い合わせ'
+      },
+      about: { title: 'Alinについて', content: [
+        '南京在住時代、Alinはこの忍耐を指の筋肉記憶に変えました。',
+        '私たちのクラスでは急がず、編み目をゆっくりと学び、作品を急ぐ必要はありません。',
+        '受注生産では流れ作業ではなく、すべてのドールはAlin自身手作りです。'
+      ]},
+      contact: { 
+        title: 'お問い合わせ',
+        address: '上海（詳細はお問い合わせください）',
+        wechat: 'WeChat / WeChat: alinhandwork',
+        cta: 'ワークショップのご予約やカスタムご注文，欢迎',
+        etsy: 'Etsy: amigucustom.etsy.com →'
+      }
+    },
+    footer: 'Alin Handcraft Studio © 2026',
+    whyChooseThis: '選ばれる理由',
+    howToOrder: '注文方法',
+    digitalDownload: 'デジタルダウンロード',
+    moreImages: 'その他の画像',
+    selectSize: 'サイズを選択',
+    selectColor: '色を選択',
+    selected: '選択済み',
+    priceTBD: 'カスタム見積もり｜ご要望に応じて個別確認',
+    contactForQuote: '見積りを依頼',
+    basePrice: '基本価格'
   },
   'ja': {
     logo: 'Alin Handcraft',
@@ -199,7 +264,10 @@ export const translations = {
       about: { title: 'Alin 소개', content: ['남경에서 생활한 기간 동안 Alin은 이 인내를 손가락의 근육 기억으로 바꿨습니다.'] },
       contact: { title: '문의하기', address: '상하이 (문의时请咨询详情)', etsy: 'Etsy: amigucustom.etsy.com →' },
     },
-    footer: 'Alin Handcraft Studio © 2026'
+    footer: 'Alin Handcraft Studio © 2026',
+    priceTBD: '맞춤 견적｜요청 시 개별 확인',
+    contactForQuote: '견적 문의',
+    basePrice: '기본 가격'
   },
   'pt': {
     logo: 'Alin Handcraft',
