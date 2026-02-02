@@ -1,0 +1,47 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  lang?: 'zh' | 'en';
+}
+
+const { title, description = '阿琳手作工作室 - 手工编织玩偶专卖店', lang = 'zh' } = Astro.props;
+const currentLang = lang;
+---
+
+<!doctype html>
+<html lang={currentLang}>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <link rel="icon" type="image/jpeg" href="/favicon.jpg">
+  <link rel="canonical" href="https://alincraft.com">
+  
+  <!-- JSON-LD -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "阿琳手作工作室",
+    "url": "https://alincraft.com",
+    "description": "手工编织玩偶专卖店",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Shanghai",
+      "addressCountry": "CN"
+    }
+  })} />
+</head>
+<body>
+  <slot />
+</body>
+</html>
+
+<style is:global>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; background-color: #FDFBF7; color: #4A4A4A; line-height: 1.8; }
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; height: auto; }
+</style>

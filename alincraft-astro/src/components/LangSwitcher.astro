@@ -1,0 +1,49 @@
+---
+interface Props {
+  currentLocale: string;
+}
+
+const { currentLocale } = Astro.props;
+import { langNames } from '../i18n/translations';
+
+const locales = Object.keys(langNames);
+---
+
+<div class="lang-switcher">
+  <select 
+    onchange="window.location.href = this.value" 
+    class="lang-select"
+  >
+    {locales.map(locale => (
+      <option 
+        value={locale === 'en' ? '/en/' : `/${locale}/`}
+        selected={currentLocale === locale}
+      >
+        {langNames[locale]}
+      </option>
+    ))}
+  </select>
+</div>
+
+<style>
+  .lang-switcher {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    z-index: 100;
+  }
+  
+  .lang-select {
+    padding: 6px 12px;
+    border: 1px solid #DDD;
+    background: #FDFBF7;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .lang-select:hover {
+    border-color: #BBB;
+  }
+</style>

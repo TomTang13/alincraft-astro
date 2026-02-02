@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alin Handcraft</title>
+  <script>
+    (function() {
+      var langMap = {
+        'zh': 'zh-CN', 'zh-CN': 'zh-CN', 'zh-TW': 'zh-TW',
+        'ja': 'ja', 'ko': 'ko', 'pt': 'pt', 'es': 'es',
+        'fr': 'fr', 'de': 'de', 'it': 'it', 'ru': 'ru',
+        'ar': 'ar', 'hi': 'hi', 'th': 'th', 'vi': 'vi',
+        'id': 'id', 'ms': 'ms', 'tr': 'tr', 'pl': 'pl', 'nl': 'nl'
+      };
+      var browserLang = (navigator.language || 'en').toLowerCase();
+      var detectedLang = 'en';
+      for (var key in langMap) {
+        if (browserLang.includes(key)) {
+          detectedLang = langMap[key];
+          break;
+        }
+      }
+      window.location.href = '/' + detectedLang + '/';
+    })();
+  </script>
+</head>
+<body>
+  <noscript>
+    <p>Redirecting... Click <a href="/en/">here</a> if not redirected.</p>
+  </noscript>
+</body>
+</html>

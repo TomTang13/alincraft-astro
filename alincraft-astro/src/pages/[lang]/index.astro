@@ -1,0 +1,149 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import LangSwitcher from '../../components/LangSwitcher.astro';
+import { getLangContent, getText, langNames } from '../../i18n/translations';
+
+export function getStaticPaths() {
+  const locales = ['en', 'zh-CN', 'zh-TW', 'ja', 'ko', 'pt', 'pt-BR', 'es', 'fr', 'de', 'it', 'ru', 'ar', 'hi', 'th', 'vi', 'id', 'ms', 'tr', 'pl', 'nl'];
+  return locales.map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const locale = lang || 'en';
+const t = (key: string) => getText(locale, key);
+const sections = getLangContent(locale, 'story');
+const memorial = getLangContent(locale, 'memorial');
+const about = getLangContent(locale, 'about');
+const contact = getLangContent(locale, 'contact');
+
+const works = [
+  { image: '/images/work1.jpg', name: locale === 'zh-CN' ? '法国斗牛犬' : locale === 'zh-TW' ? '法國鬥牛犬' : 'French Bulldog' },
+  { image: '/images/work2.jpg', name: locale === 'zh-CN' || locale === 'zh-TW' ? '牧羊犬' : 'Shepherd Dog' },
+  { image: '/images/work3.jpg', name: locale === 'zh-CN' ? '蓝陨石法斗' : locale === 'zh-TW' ? '藍隕石法鬥' : 'Blue Merle Frenchie' }
+];
+---
+
+<Layout title={`${t('logo')} | ${t('tagline')}`} lang={locale}>
+  <LangSwitcher currentLocale={locale} />
+  
+  <header>
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; padding: 24px 24px;">
+      <h1 class="logo">{t('logo')}</h1>
+      <nav>
+        <a href={`/${locale}/products/`}>{t('products')}</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>{t('logo')}</h1>
+        <p class="tagline">{t('tagline')}</p>
+      </div>
+    </section>
+
+    <section class="story">
+      <div class="container">
+        <h2>{sections.title}</h2>
+        <div class="story-content">
+          {sections.content.map((p: string) => <p>{p}</p>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="works">
+      <div class="container">
+        <h2>{getLangContent(locale, 'works').title}</h2>
+        <div class="works-grid">
+          {works.map(work => (
+            <div class="work-item">
+              <img src={work.image} alt={work.name} />
+              <p>{work.name}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="memorial">
+      <div class="container">
+        <h2>{memorial.title}</h2>
+        <div class="memorial-content">
+          {memorial.content.map((p: string) => <p>{p}</p>)}
+          <p class="memorial-cta">
+            <a href="mailto:service@alincraft.com" class="memorial-btn">{memorial.cta}</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="about">
+      <div class="container">
+        <h2>{about.title}</h2>
+        <div class="about-content">
+          {about.content.map((p: string) => <p>{p}</p>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="contact">
+      <div class="container">
+        <h2>{contact.title}</h2>
+        <div class="contact-content">
+          <p>{contact.address}</p>
+          <p>{contact.wechat}</p>
+          <p>{contact.cta}</p>
+          <p><a href="mailto:service@alincraft.com">service@alincraft.com</a></p>
+          <p><a href="https://amigucustom.etsy.com" target="_blank">{contact.etsy}</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>{t('footer')}</p>
+  </footer>
+</Layout>
+
+<style>
+  header { padding: 20px 0; }
+  .logo { font-size: 24px; font-weight: 300; letter-spacing: 4px; }
+  nav a { margin-left: 32px; font-size: 14px; color: #4A4A4A; text-decoration: none; }
+  
+  .hero { text-align: center; padding: 80px 0; }
+  .hero h1 { font-size: 36px; font-weight: 300; margin-bottom: 16px; }
+  .tagline { font-size: 14px; color: #888; letter-spacing: 2px; }
+  
+  section { margin-bottom: 80px; }
+  h2 { font-size: 18px; font-weight: 400; text-align: center; letter-spacing: 4px; color: #666; margin-bottom: 40px; }
+  
+  .story-content { text-align: center; font-size: 15px; color: #555; max-width: 700px; margin: 0 auto; }
+  .story-content p { margin-bottom: 20px; text-align: justify; }
+  
+  .works-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
+  .work-item { text-align: center; }
+  .work-item img { width: 100%; max-width: 280px; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+  .work-item p { margin-top: 16px; font-size: 13px; color: #888; }
+  
+  .memorial { background: linear-gradient(to bottom, #FDFBF7, #F5F0EB); margin: 0 -24px; padding: 80px 24px; }
+  .memorial-content { max-width: 700px; margin: 0 auto; text-align: center; font-size: 15px; color: #555; }
+  .memorial-content p { margin-bottom: 20px; }
+  .memorial-cta { margin-top: 32px; }
+  .memorial-btn { display: inline-block; padding: 14px 32px; background: #4A4A4A; color: #FFF; text-decoration: none; border-radius: 4px; font-size: 14px; }
+  
+  .about-content { text-align: center; font-size: 15px; color: #555; max-width: 700px; margin: 0 auto; }
+  .about-content p { margin-bottom: 16px; }
+  
+  .contact-content { text-align: center; font-size: 14px; color: #666; }
+  .contact-content p { margin-bottom: 12px; }
+  .contact-content a { color: #4A4A4A; text-decoration: underline; }
+  
+  footer { text-align: center; padding: 60px 0; font-size: 12px; color: #AAA; letter-spacing: 2px; }
+  
+  @media (max-width: 600px) {
+    .hero { padding: 40px 0; }
+    .hero h1 { font-size: 24px; }
+    section { margin-bottom: 60px; }
+  }
+</style>

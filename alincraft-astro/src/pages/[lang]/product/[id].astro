@@ -1,0 +1,360 @@
+<Layout title={`${product ? (locale === 'zh-CN' ? product.nameZh : product.name) : 'Product'} | Alin Handcraft`} lang={locale}>
+  <LangSwitcher currentLocale={locale} />
+  
+  <header>
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; padding: 24px 24px;">
+      <h1 class="logo"><a href={`/${locale === 'en' ? '' : locale + '/'}`}>{t('logo')}</a></h1>
+      <a href={`/${locale}/products/`} class="back-link">← {t('backToProducts')}</a>
+    </div>
+  </header>
+
+  {product && (
+    <main>
+      <section class="product-detail">
+        <div class="container">
+          <div class="product-layout">
+            <div class="product-images">
+              <div class="main-image-container">
+                <img id="main-image" src={product.image} alt={locale === 'zh-CN' ? product.nameZh : product.name} class="main-image" />
+              </div>
+              <div class="thumbnail-grid" id="thumbnail-grid">
+                {product.images.slice(0, 6).map((img, i) => (
+                  <img src={img} alt={`${t('image')} ${i + 1}`} data-index={i} class="thumbnail" />
+                ))}
+              </div>
+              {product.images.length > 6 && (
+                <p class="more-images">+{product.images.length - 6} {t('moreImages')}</p>
+              )}
+            </div>
+            
+            <div class="product-info">
+              <span class="category">{product.category}</span>
+              <h1>{locale === 'zh-CN' ? product.nameZh : product.name}</h1>
+              
+              <p class="price">
+                <span id="price-display">${product.price}</span>
+                <span id="price-note" class="price-note"></span>
+              </p>
+              
+              {product.isDigital && (
+                <div class="digital-badge">
+                  <span class="badge digital">📥 {t('digitalDownload')}</span>
+                </div>
+              )}
+              
+              <div class="description">
+                {formatDescription(locale === 'zh-CN' ? product.descriptionZh : product.description).map(para => (
+                  <p>{para}</p>
+                ))}
+              </div>
+              
+              {product.sizes && (
+                <div class="options">
+                  <h4>{t('size')} <span id="selected-size" class="selected-display">{locale.startsWith('zh') ? `（${t('selectSize')}）` : ` (${t('selectSize')})`}</span></h4>
+                  <div class="size-options">
+                    {product.sizes.map((size, index) => (
+                      <button type="button" class={`size-tag ${index === 0 ? 'active' : ''}`} data-size={size} data-index={index}>{size}</button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {product.colors && product.colorImages && (
+                <div class="options">
+                  <h4>{t('color')} <span id="selected-color" class="selected-display">{locale.startsWith('zh') ? `（${t('selectColor')}）` : ` (${t('selectColor')})`}</span></h4>
+                  <div class="color-options">
+                    {product.colors.map(color => (
+                      <button type="button" class="color-tag" data-color={color}>{color}</button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {product.features && (
+                <div class="features">
+                  <h4>{t('whyChooseThis')}</h4>
+                  <ul>
+                    {product.features.map(feature => (
+                      <li>{feature}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
+              <button type="button" id="customize-btn" class="contact-btn">{t('customizeNow')}</button>
+            </div>
+          </div>
+          
+          {product.howToOrder && (
+            <div class="how-to-order">
+              <h3>{t('howToOrder')}</h3>
+              <ol>
+                {product.howToOrder.map(step => (
+                  <li>{step}</li>
+                ))}
+              </ol>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section class="contact">
+        <div class="container">
+          <h2>{contact.title}</h2>
+          <div class="contact-content">
+            <p>{contact.address}</p>
+            <p>{contact.wechat}</p>
+            <p>{contact.cta}</p>
+            <p><a href="mailto:service@alincraft.com">{contact.email || 'service@alincraft.com'}</a></p>
+            <p><a href="https://amigucustom.etsy.com" target="_blank">{contact.etsy}</a></p>
+          </div>
+        </div>
+      </section>
+    </main>
+  )}
+
+  <footer>
+    <p>{t('footer')}</p>
+  </footer>
+</Layout>
+
+<script define:vars={{ 
+  productId: product?.id, 
+  productName: locale === 'zh-CN' ? product?.nameZh : product?.name,
+  hasSizes: !!product?.sizes,
+  hasColors: !!product?.colors,
+  defaultImages: product?.images || [],
+  colorImages: product?.colorImages || {},
+  basePrice: product?.price || 0,
+  locale: locale,
+  translations: {
+    selectSize: locale.startsWith('zh') ? '请选择尺寸' : 'Please select size',
+    selectColor: locale.startsWith('zh') ? '请选择颜色' : 'Please select color',
+    selected: locale.startsWith('zh') ? '已选择' : 'Selected',
+    priceTBD: locale.startsWith('zh') ? '价格待定' : 'Price TBD',
+    contactForQuote: locale.startsWith('zh') ? '联系获取报价' : 'Contact for quote',
+    basePrice: locale.startsWith('zh') ? '基础价格' : 'Base Price'
+  }
+}}>
+  let selectedSize = '';
+  let selectedColor = '';
+  let selectedSizeIndex = 0;
+  let currentImages = [...defaultImages];
+  let currentImageIndex = 0;
+  
+  // Initialize with first size selected
+  const firstSizeBtn = document.querySelector('.size-tag');
+  if (firstSizeBtn) {
+    selectedSize = firstSizeBtn.dataset.size;
+    selectedSizeIndex = parseInt(firstSizeBtn.dataset.index) || 0;
+  }
+  
+  // Size selection
+  document.querySelectorAll('.size-tag').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.size-tag').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedSize = btn.dataset.size;
+      selectedSizeIndex = parseInt(btn.dataset.index) || 0;
+      document.getElementById('selected-size').textContent = ` (${translations.selected}: ${selectedSize})`;
+      
+      // Update price display
+      updatePriceDisplay();
+    });
+  });
+  
+  // Color selection - switch images
+  document.querySelectorAll('.color-tag').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.color-tag').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedColor = btn.dataset.color;
+      document.getElementById('selected-color').textContent = ` (${translations.selected}: ${selectedColor})`;
+      
+      const colorKey = btn.dataset.color;
+      if (colorImages[colorKey]) {
+        currentImages = colorImages[colorKey];
+        currentImageIndex = 0;
+      } else {
+        currentImages = defaultImages;
+        currentImageIndex = 0;
+      }
+      updateMainImage();
+      updateThumbnails();
+    });
+  });
+  
+  // Thumbnail click
+  document.querySelectorAll('.thumbnail').forEach((thumb, idx) => {
+    thumb.addEventListener('click', () => {
+      currentImageIndex = idx;
+      updateMainImage();
+      updateThumbnailHighlight();
+    });
+  });
+  
+  function updateMainImage() {
+    const mainImg = document.getElementById('main-image');
+    if (currentImages[currentImageIndex]) {
+      mainImg.src = currentImages[currentImageIndex];
+    }
+  }
+  
+  function updateThumbnails() {
+    const grid = document.getElementById('thumbnail-grid');
+    grid.innerHTML = '';
+    currentImages.slice(0, 6).forEach((img, idx) => {
+      const thumb = document.createElement('img');
+      thumb.src = img;
+      thumb.alt = `${translations.image || 'Image'} ${idx + 1}`;
+      thumb.dataset.index = idx;
+      thumb.className = 'thumbnail' + (idx === currentImageIndex ? ' active' : '');
+      thumb.addEventListener('click', () => {
+        currentImageIndex = idx;
+        updateMainImage();
+        updateThumbnailHighlight();
+      });
+      grid.appendChild(thumb);
+    });
+  }
+  
+  function updateThumbnailHighlight() {
+    document.querySelectorAll('.thumbnail').forEach((t, idx) => {
+      t.classList.toggle('active', idx === currentImageIndex);
+    });
+  }
+  
+  function updatePriceDisplay() {
+    const priceDisplay = document.getElementById('price-display');
+    const priceNote = document.getElementById('price-note');
+    
+    if (selectedSizeIndex === 0) {
+      // First size (smallest) - show base price
+      priceDisplay.textContent = `$${basePrice}`;
+      priceNote.textContent = '';
+    } else {
+      // Larger size - show TBD
+      priceDisplay.textContent = translations.priceTBD;
+      priceNote.textContent = ` (${translations.basePrice}: $${basePrice})`;
+    }
+  }
+  
+  // Initialize price display
+  if (hasSizes) {
+    updatePriceDisplay();
+  }
+  
+  // Customize button
+  document.getElementById('customize-btn').addEventListener('click', () => {
+    let subject = `Custom Order: ${productName}`;
+    let body = `Hi A-Lin,%0D%0A%0D%0AI would like to order a custom ${productName}.%0D%0A`;
+    
+    if (hasSizes && selectedSize) {
+      body += `Size: ${selectedSize}%0D%0A`;
+    }
+    if (hasColors && selectedColor) {
+      body += `Color: ${selectedColor}%0D%0A`;
+    }
+    
+    body += `%0D%0APlease let me know the total price and estimated delivery time.%0D%0A%0D%0AThank you!`;
+    
+    window.location.href = `mailto:service@alincraft.com?subject=${encodeURIComponent(subject)}&body=${body}`;
+  });
+</script>
+
+<style>
+  header { padding: 20px 0; }
+  .logo { font-size: 24px; font-weight: 300; letter-spacing: 4px; }
+  .logo a { color: inherit; text-decoration: none; }
+  .back-link { color: #888; text-decoration: none; font-size: 14px; }
+  
+  .product-detail { padding: 40px 0; }
+  
+  .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-bottom: 60px; }
+  
+  .main-image-container { margin-bottom: 16px; }
+  .main-image { width: 100%; border-radius: 8px; aspect-ratio: 1; object-fit: cover; }
+  
+  .thumbnail-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+  .thumbnail { 
+    width: 100%; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    border: 2px solid transparent;
+    transition: 0.2s;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+  .thumbnail:hover { border-color: #999; }
+  .thumbnail.active { border-color: #4A4A4A; }
+  
+  .more-images { font-size: 12px; color: #888; text-align: center; margin-top: 8px; }
+  
+  .product-info .category { font-size: 12px; color: #888; letter-spacing: 2px; text-transform: uppercase; }
+  .product-info h1 { font-size: 28px; font-weight: 400; margin: 12px 0 16px; }
+  .product-info .price { font-size: 24px; color: #4A4A4A; margin-bottom: 16px; }
+  .price-note { font-size: 14px; color: #888; font-weight: normal; }
+  
+  .digital-badge { margin-bottom: 16px; }
+  .badge.digital { display: inline-block; padding: 8px 16px; background: #4A4A4A; color: #FFF; border-radius: 20px; font-size: 13px; }
+  
+  .description { font-size: 15px; color: #555; line-height: 1.8; margin-bottom: 24px; }
+  .description p { margin-bottom: 12px; }
+  
+  .options { margin-bottom: 20px; }
+  .options h4 { font-size: 14px; font-weight: 400; margin-bottom: 12px; color: #666; }
+  .selected-display { color: #4A4A4A; font-weight: 500; }
+  .size-options, .color-options { display: flex; flex-wrap: wrap; gap: 8px; }
+  .size-tag, .color-tag { 
+    padding: 8px 16px; 
+    border: 1px solid #DDD; 
+    border-radius: 20px; 
+    font-size: 13px; 
+    background: #FFF;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .size-tag:hover, .color-tag:hover { border-color: #999; }
+  .size-tag.active, .color-tag.active { 
+    background: #4A4A4A; 
+    color: #FFF; 
+    border-color: #4A4A4A; 
+  }
+  
+  .features { background: #FAFAFA; padding: 20px; border-radius: 8px; margin-bottom: 24px; }
+  .features h4 { font-size: 14px; font-weight: 500; margin-bottom: 12px; color: #4A4A4A; }
+  .features ul { margin: 0; padding-left: 20px; }
+  .features li { font-size: 14px; color: #666; margin-bottom: 8px; line-height: 1.6; }
+  
+  .how-to-order { background: #F5F5F5; padding: 32px; border-radius: 8px; }
+  .how-to-order h3 { font-size: 18px; font-weight: 400; margin-bottom: 20px; color: #4A4A4A; text-align: center; letter-spacing: 2px; }
+  .how-to-order ol { margin: 0; padding-left: 24px; }
+  .how-to-order li { font-size: 15px; color: #555; margin-bottom: 12px; line-height: 1.7; padding-left: 8px; }
+  
+  .contact-btn {
+    display: inline-block;
+    padding: 16px 48px;
+    background: #4A4A4A;
+    color: #FFF;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: 0.3s;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+  }
+  .contact-btn:hover { background: #333; }
+  
+  .contact-content { text-align: center; font-size: 14px; color: #666; }
+  .contact-content p { margin-bottom: 12px; }
+  .contact-content a { color: #4A4A4A; text-decoration: underline; }
+  
+  footer { text-align: center; padding: 60px 0; font-size: 12px; color: #AAA; letter-spacing: 2px; }
+  
+  @media (max-width: 800px) {
+    .product-layout { grid-template-columns: 1fr; gap: 32px; }
+    .thumbnail-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+</style>
