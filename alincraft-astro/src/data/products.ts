@@ -34,7 +34,7 @@ export const products: Product[] = [
       "/images/products/p1_7.jpg", "/images/products/p1_8.jpg", "/images/products/p1_9.jpg",
       "/images/products/p1_10.jpg"
     ],
-    sizes: ["10cm", "16cm", "20cm", "25cm", "30cm", "35cm", "40cm"],
+    sizes: ["4\\\" (10cm)", "6\\\" (16cm)", "8\\\" (20cm)", "10\\\" (25cm)", "12\\\" (30cm)", "14\\\" (35cm)", "16\\\" (40cm)"],
     colors: ["Blue Merle", "Red Merle", "Black", "Red with White/Tan", "Others"],
     colorImages: {
       "Blue Merle": ["/images/products/p1_1.jpg", "/images/products/p1_2.jpg", "/images/products/p1_3.jpg", "/images/products/p1_4.jpg"],
@@ -71,7 +71,7 @@ export const products: Product[] = [
       "/images/products/p2_7.jpg", "/images/products/p2_8.jpg", "/images/products/p2_9.jpg",
       "/images/products/p2_10.jpg"
     ],
-    sizes: ["10cm", "16cm", "20cm", "25cm", "30cm", "35cm", "40cm"],
+    sizes: ["4\\\" (10cm)", "6\\\" (16cm)", "8\\\" (20cm)", "10\\\" (25cm)", "12\\\" (30cm)", "14\\\" (35cm)", "16\\\" (40cm)"],
     colors: ["White", "Fawn", "Brindle", "Black", "Cream", "Grey Merle", "Others"],
     colorImages: {
       "White": ["/images/products/p2_1.jpg", "/images/products/p2_2.jpg"],
@@ -110,7 +110,7 @@ export const products: Product[] = [
       "/images/products/p4_7.jpg", "/images/products/p4_8.jpg", "/images/products/p4_9.jpg",
       "/images/products/p4_10.jpg"
     ],
-    sizes: ["10cm", "16cm", "20cm", "25cm", "30cm", "35cm", "40cm"],
+    sizes: ["4\\\" (10cm)", "6\\\" (16cm)", "8\\\" (20cm)", "10\\\" (25cm)", "12\\\" (30cm)", "14\\\" (35cm)", "16\\\" (40cm)"],
     colors: ["Chocolate", "Red", "Black and Tan", "Dapple", "Others"],
     colorImages: {
       "Chocolate": ["/images/products/p4_1.jpg", "/images/products/p4_2.jpg"],
@@ -142,7 +142,7 @@ export const products: Product[] = [
     category: "Dogs",
     image: "/images/products/p5_1.jpg",
     images: ["/images/products/p5_1.jpg", "/images/products/p5_2.jpg", "/images/products/p5_3.jpg"],
-    sizes: ["10cm", "16cm", "20cm", "25cm", "30cm", "35cm", "40cm"],
+    sizes: ["4\\\" (10cm)", "6\\\" (16cm)", "8\\\" (20cm)", "10\\\" (25cm)", "12\\\" (30cm)", "14\\\" (35cm)", "16\\\" (40cm)"],
     colors: ["Standard Black & Tan"],
     colorImages: {
       "Standard Black & Tan": ["/images/products/p5_1.jpg", "/images/products/p5_2.jpg", "/images/products/p5_3.jpg"]
@@ -174,7 +174,7 @@ export const products: Product[] = [
       "/images/products/p6_4.jpg", "/images/products/p6_5.jpg", "/images/products/p6_6.jpg",
       "/images/products/p6_7.jpg", "/images/products/p6_8.jpg", "/images/products/p6_9.jpg"
     ],
-    sizes: ["10cm", "16cm", "20cm", "25cm", "30cm", "35cm", "40cm"],
+    sizes: ["4\\\" (10cm)", "6\\\" (16cm)", "8\\\" (20cm)", "10\\\" (25cm)", "12\\\" (30cm)", "14\\\" (35cm)", "16\\\" (40cm)"],
     colors: ["Bicolor Brown/White", "Bicolor Black/White", "Black/Brown/White", "Others"],
     colorImages: {
       "Bicolor Brown/White": ["/images/products/p6_1.jpg", "/images/products/p6_2.jpg", "/images/products/p6_3.jpg"],
@@ -210,7 +210,7 @@ export const products: Product[] = [
       "/images/products/p7_7.jpg", "/images/products/p7_8.jpg", "/images/products/p7_9.jpg",
       "/images/products/p7_10.jpg"
     ],
-    sizes: ["10cm", "16cm", "20cm", "25cm", "30cm", "35cm", "40cm"],
+    sizes: ["4\\\" (10cm)", "6\\\" (16cm)", "8\\\" (20cm)", "10\\\" (25cm)", "12\\\" (30cm)", "14\\\" (35cm)", "16\\\" (40cm)"],
     colors: ["Brindle", "White", "Red", "Fawn", "Others"],
     colorImages: {
       "Brindle": ["/images/products/p7_1.jpg", "/images/products/p7_2.jpg", "/images/products/p7_3.jpg"],
@@ -247,7 +247,7 @@ export const products: Product[] = [
       "/images/products/p8_7.jpg", "/images/products/p8_8.jpg", "/images/products/p8_9.jpg",
       "/images/products/p8_10.jpg"
     ],
-    sizes: ["10cm", "16cm", "20cm", "25cm", "30cm", "35cm", "40cm"],
+    sizes: ["4\\\" (10cm)", "6\\\" (16cm)", "8\\\" (20cm)", "10\\\" (25cm)", "12\\\" (30cm)", "14\\\" (35cm)", "16\\\" (40cm)"],
     colors: ["White", "Silver Gray", "Apricot", "Brown", "Black", "Others"],
     colorImages: {
       "White": ["/images/products/p8_1.jpg", "/images/products/p8_2.jpg"],
@@ -285,7 +285,7 @@ export const products: Product[] = [
       "/images/products/p9_7.jpg", "/images/products/p9_8.jpg", "/images/products/p9_9.jpg",
       "/images/products/p9_10.jpg"
     ],
-    sizes: ["10cm", "16cm", "20cm", "25cm", "30cm", "35cm", "40cm"],
+    sizes: ["4\\\" (10cm)", "6\\\" (16cm)", "8\\\" (20cm)", "10\\\" (25cm)", "12\\\" (30cm)", "14\\\" (35cm)", "16\\\" (40cm)"],
     colors: ["Silver", "Black and Tan", "Solid Black", "Gray", "Others"],
     colorImages: {
       "Silver": ["/images/products/p9_1.jpg", "/images/products/p9_2.jpg"],
@@ -317,7 +317,7 @@ export const products: Product[] = [
     category: "Dogs",
     image: "/images/products/p10_1.jpg",
     images: ["/images/products/p10_1.jpg", "/images/products/p10_2.jpg", "/images/products/p10_3.jpg", "/images/products/p10_4.jpg", "/images/products/p10_5.jpg"],
-    sizes: ["10cm", "16cm", "20cm", "25cm", "30cm", "35cm", "40cm"],
+    sizes: ["4\\\" (10cm)", "6\\\" (16cm)", "8\\\" (20cm)", "10\\\" (25cm)", "12\\\" (30cm)", "14\\\" (35cm)", "16\\\" (40cm)"],
     colors: ["Light Gold", "Dark Gold", "Others"],
     colorImages: {
       "Light Gold": ["/images/products/p10_1.jpg", "/images/products/p10_2.jpg"],
