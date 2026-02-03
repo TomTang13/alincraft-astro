@@ -43,13 +43,10 @@ function formatDescription(text: string) {
                 <img id="main-image" src={product.image} alt={locale === 'zh-CN' ? product.nameZh : product.name} class="main-image" />
               </div>
               <div class="thumbnail-grid" id="thumbnail-grid">
-                {product.images.slice(0, 6).map((img, i) => (
+                {product.images.map((img, i) => (
                   <img src={img} alt={`${t('image')} ${i + 1}`} data-index={i} class="thumbnail" />
                 ))}
               </div>
-              {product.images.length > 6 && (
-                <p class="more-images">+{product.images.length - 6} {t('moreImages')}</p>
-              )}
             </div>
             
             <div class="product-info">
@@ -289,8 +286,6 @@ function formatDescription(text: string) {
   }
   .thumbnail:hover { border-color: #999; }
   .thumbnail.active { border-color: #4A4A4A; }
-  
-  .more-images { font-size: 12px; color: #888; text-align: center; margin-top: 8px; }
   
   .product-info .category { font-size: 12px; color: #888; letter-spacing: 2px; text-transform: uppercase; }
   .product-info h1 { font-size: 28px; font-weight: 400; margin: 12px 0 16px; }
