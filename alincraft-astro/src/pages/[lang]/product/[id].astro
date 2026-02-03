@@ -6,7 +6,7 @@ import { products } from '../../../data/products';
 
 export function getStaticPaths() {
   const locales = ['en', 'zh-CN', 'zh-TW', 'ja', 'ko', 'pt', 'pt-BR', 'es', 'fr', 'de', 'it', 'ru', 'ar', 'hi', 'th', 'vi', 'id', 'ms', 'tr', 'pl', 'nl'];
-  const productPaths = locales.flatMap(lang => 
+  const productPaths = locales.flatMap(lang =>
     products.map(product => ({ params: { lang, id: product.id.toString() } }))
   );
   return productPaths;
@@ -21,9 +21,57 @@ const product = products.find(p => p.id === parseInt(id));
 function formatDescription(text: string) {
   return text.split('\n\n').map(p => p.trim()).filter(p => p.length > 0);
 }
+
+const productName = product ? (locale === 'zh-CN' ? product.nameZh : product.name) : 'Product';
+const productDesc = product ? (locale === 'zh-CN' ? product.descriptionZh : product.description) : '';
+const productImage = product?.image || '/images/og-default.jpg';
+
+// Breadcrumb schema
+const breadcrumbItems = [
+  { name: 'Home', url: 'https://alincraft.com/' + (locale === 'en' ? 'en/' : '') },
+  { name: t('products'), url: `https://alincraft.com/${locale}/products/` },
+  { name: productName, url: `https://alincraft.com/${locale}/product/${id}/` }
+];
+
+// Product schema
+const productSchema = product ? {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": productName,
+  "description": productDesc,
+  "image": product.images.map(img => `https://alincraft.com${img}`),
+  "brand": {
+    "@type": "Brand",
+    "name": "Alin Handcraft"
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": product.currency,
+    "price": product.price,
+    "availability": "https://schema.org/InStock",
+    "seller": {
+      "@type": "Organization",
+      "name": "Alin Handcraft"
+    }
+  }
+} : null;
 ---
 
-<Layout title={`${product ? (locale === 'zh-CN' ? product.nameZh : product.name) : 'Product'} | Alin Handcraft`} lang={locale}>
+<Layout title={`${productName} | Alin Handcraft`} description={productDesc} image={productImage} lang={locale}>
+  <!-- BreadcrumbList Schema -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": breadcrumbItems.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.name,
+      "item": item.url
+    }))
+  })} />
+
+  <!-- Product Schema -->
+  {productSchema && <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />}
   <LangSwitcher currentLocale={locale} />
   
   <header>

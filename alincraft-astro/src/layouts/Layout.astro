@@ -3,10 +3,12 @@ interface Props {
   title: string;
   description?: string;
   lang?: 'zh' | 'en';
+  image?: string;
 }
 
-const { title, description = '阿琳手作工作室 - 手工编织玩偶专卖店', lang = 'zh' } = Astro.props;
+const { title, description = '阿琳手作工作室 - 手工编织玩偶专卖店', lang = 'zh', image = '/images/og-default.jpg' } = Astro.props;
 const currentLang = lang;
+const canonicalURL = `https://alincraft.com${Astro.url.pathname.replace(/\/$/, '')}`;
 ---
 
 <!doctype html>
@@ -17,20 +19,39 @@ const currentLang = lang;
   <title>{title}</title>
   <meta name="description" content={description}>
   <link rel="icon" type="image/jpeg" href="/favicon.jpg">
-  <link rel="canonical" href="https://alincraft.com">
+  <link rel="canonical" href={canonicalURL}>
   
-  <!-- JSON-LD -->
+  <!-- Open Graph -->
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:image" content={`https://alincraft.com${image}`}>
+  <meta property="og:url" content={canonicalURL}>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alin Handcraft">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content={title}>
+  <meta name="twitter:description" content={description}>
+  <meta name="twitter:image" content={`https://alincraft.com${image}`}>
+  
+  <!-- JSON-LD LocalBusiness -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "阿琳手作工作室",
+    "@type": ["Store", "LocalBusiness"],
+    "name": "阿琳手作工作室 | Alin Handcraft",
+    "description": "手工编织玩偶专卖店，提供定制宠物纪念玩偶服务",
     "url": "https://alincraft.com",
-    "description": "手工编织玩偶专卖店",
+    "logo": "https://alincraft.com/favicon.jpg",
+    "image": "https://alincraft.com/images/og-default.jpg",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Shanghai",
       "addressCountry": "CN"
-    }
+    },
+    "priceRange": "$$$",
+    "paymentAccepted": "PayPal, Etsy",
+    "currenciesAccepted": "USD, CNY"
   })} />
 </head>
 <body>
