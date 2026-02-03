@@ -60,10 +60,13 @@ function getProductDescription(product: any) {
       <div class="container">
         <div class="products-grid">
           {products.map((product, index) => (
-            <div class="product-card">
+            <a href={`/${locale}/product/${product.id}`} class="product-card">
               <div class="product-image">
                 <img src={product.image} alt={getProductName(product)} />
                 {product.isDigital && <span class="badge digital">Digital</span>}
+                <div class="product-overlay">
+                  <span>{t('viewDetails')}</span>
+                </div>
               </div>
               <div class="product-info">
                 <h3>{getProductName(product)}</h3>
@@ -74,11 +77,8 @@ function getProductDescription(product: any) {
                 {product.sizes && (
                   <p class="sizes">{product.sizes.join(' / ')}</p>
                 )}
-                <a href={`/${locale}/product/${product.id}`} class="view-btn">
-                  {t('viewDetails')}
-                </a>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>
@@ -118,17 +118,35 @@ function getProductDescription(product: any) {
   .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 40px; }
   
   .product-card {
+    display: block;
     background: #FFF;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0,0,0,0.06);
     transition: transform 0.3s;
+    color: inherit;
+    text-decoration: none;
   }
   
   .product-card:hover { transform: translateY(-4px); }
   
   .product-image { position: relative; aspect-ratio: 1; overflow: hidden; }
   .product-image img { width: 100%; height: 100%; object-fit: cover; }
+  
+  .product-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .product-overlay span { color: #fff; font-size: 14px; letter-spacing: 2px; }
+  
+  .product-card:hover .product-overlay { opacity: 1; }
   
   .badge {
     position: absolute;
@@ -147,19 +165,6 @@ function getProductDescription(product: any) {
   .product-info .description { font-size: 13px; color: #888; line-height: 1.6; margin-bottom: 16px; }
   .product-info .price { font-size: 20px; font-weight: 500; color: #4A4A4A; margin-bottom: 8px; }
   .product-info .sizes { font-size: 12px; color: #AAA; margin-bottom: 16px; }
-  
-  .view-btn {
-    display: inline-block;
-    padding: 10px 24px;
-    background: #4A4A4A;
-    color: #FFF;
-    text-decoration: none;
-    border-radius: 4px;
-    font-size: 13px;
-    transition: 0.3s;
-  }
-  
-  .view-btn:hover { background: #333; }
   
   .contact-content { text-align: center; font-size: 14px; color: #666; }
   .contact-content p { margin-bottom: 12px; }
