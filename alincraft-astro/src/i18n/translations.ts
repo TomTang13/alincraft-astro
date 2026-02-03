@@ -187,7 +187,7 @@ export const translations = {
         content: [
           '愛するペットが旅立った時、彼らが残した温かな思い出は永遠に保存されるべきです。',
           'Alin Handcraftはカスタムペットメモリアルトイを提供します。写真や説明に基づいて、ペットの姿を永遠に捉えるユニークな編みぐるみを制作します。',
-          'すべてのメモリアルトイは愛と思い出を載せており、自分への慰め，也是家人への温かな贈り物です。'
+          'すべてのメモリアルトイは愛と思い出を載せており、自分への慰め、ご家族への温かな贈り物です。'
         ],
         cta: 'お問い合わせ'
       },
@@ -203,7 +203,7 @@ export const translations = {
         title: 'お問い合わせ',
         address: '上海（詳細はお問い合わせください）',
         wechat: 'WeChat / WeChat: alinhandwork',
-        cta: 'ワークショップのご予約やカスタムご注文，欢迎',
+        cta: 'ワークショップのご予約やカスタムご注文も歓迎',
         etsy: 'Etsy: amigucustom.etsy.com →'
       }
     },
@@ -827,7 +827,7 @@ export const translations = {
         'Selamat datang di Alin Handcraft, tempat yang lahir dari "kelambatan" dan didedikasikan untuk "fokus".',
         'A-Lin, pendiri studio ini, tumbuh tenang di kota kelahirannya di Chaoshan.',
         'Kakeknya, yang kini berusia delapan puluhan, masih bertahan dengan sulaman manik-manik Chaoshan.',
-        'Itulah kepastian diam yang diajarkannya sejak dini: kerajinan bukan hanya tumpukan teknik, melainkan cara让 hati beristirahat.',
+        'Itulah kepastian diam yang diajarkannya sejak dini: kerajinan bukan hanya tumpukan teknik, melainkan cara agar hati beristirahat.',
         'Membawa ketenangan yang diwariskan ini, A-Lin menemukan jalannya menuju rajut.',
         'Hari ini, studio ini tiba di Shanghai. Di kota yang menghargai efisiensi, A-Lin ingin menawarkan sudut "kontra-efisiensi".',
         'Kehangatan sejati bukan tentang seberapa cepat Anda menciptakan, tetapi berapa lama Anda bersedia bertahan.'
