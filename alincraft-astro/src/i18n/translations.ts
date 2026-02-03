@@ -1,7 +1,7 @@
 export const translations = {
   'en': {
     logo: 'Alin Handcraft',
-    tagline: 'Craft slowly, stay with you forever',
+    tagline: 'Made slowly, Meant to stay',
     nav: { shop: 'Shop' },
     products: 'Products',
     productsTagline: 'Handmade with Love',
@@ -56,7 +56,7 @@ export const translations = {
   },
   'zh-CN': {
     logo: '阿琳手作',
-    tagline: '手作不急，陪你很久',
+    tagline: '手作不急，陪伴很久',
     nav: { shop: '商店' },
     products: '商品展示',
     productsTagline: '手工定制，匠心独运',
@@ -111,7 +111,7 @@ export const translations = {
   },
   'zh-TW': {
     logo: '阿琳手作',
-    tagline: '手作不急，陪你很久',
+    tagline: '手作不急，陪伴很久',
     nav: { shop: '商店' },
     products: '商品展示',
     productsTagline: '手工定制，匠心獨運',
