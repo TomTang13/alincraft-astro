@@ -59,8 +59,13 @@ const works = products.slice(0, 6).map(p => ({
         <h2>{getLangContent(locale, 'works').title}</h2>
         <div class="works-grid">
           {works.map(work => (
-            <a href={`/${locale}/products/${work.id}/`} class="work-item">
-              <img src={work.image} alt={work.name} />
+            <a href={`/${locale}/product/${work.id}/`} class="work-item">
+              <div class="work-image-wrapper">
+                <img src={work.image} alt={work.name} />
+                <div class="work-overlay">
+                  <span>{t('viewDetails')}</span>
+                </div>
+              </div>
               <p>{work.name}</p>
             </a>
           ))}
@@ -124,9 +129,12 @@ const works = products.slice(0, 6).map(p => ({
   .story-content p { margin-bottom: 20px; text-align: justify; }
   
   .works-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
-  .work-item { text-align: center; text-decoration: none; color: inherit; transition: opacity 0.2s; }
-  .work-item:hover { opacity: 0.8; }
-  .work-item img { width: 100%; max-width: 280px; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+  .work-item { text-align: center; text-decoration: none; color: inherit; }
+  .work-image-wrapper { position: relative; display: inline-block; overflow: hidden; border-radius: 4px; }
+  .work-image-wrapper img { display: block; width: 100%; max-width: 280px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+  .work-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
+  .work-overlay span { color: #fff; font-size: 14px; letter-spacing: 2px; }
+  .work-item:hover .work-overlay { opacity: 1; }
   .work-item p { margin-top: 16px; font-size: 13px; color: #888; }
   
   .memorial { background: linear-gradient(to bottom, #FDFBF7, #F5F0EB); margin: 0 -24px; padding: 80px 24px; }
