@@ -303,7 +303,7 @@ const productSchema = product ? {
       body += `Color: ${selectedColor}%0D%0A`;
     }
     
-    body += `%0D%0APlease let me know the total price and estimated delivery time.%0D%0A%0D%0AThank you!`;
+    body += `%0D%0AHere are some photos of my pet:%0D%0A%0D%0A%0D%0APlease let me know the total price and estimated delivery time.%0D%0A%0D%0AThank you!`;
     
     window.location.href = `mailto:service@alincraft.com?subject=${encodeURIComponent(subject)}&body=${body}`;
   });
