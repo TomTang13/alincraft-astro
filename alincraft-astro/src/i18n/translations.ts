@@ -52,7 +52,8 @@ export const translations = {
     selected: 'Selected',
     priceTBD: 'Custom Quote',
     contactForQuote: 'Contact for quote',
-    basePrice: 'Starting from'
+    basePrice: 'Starting from',
+    securePayment: 'Custom orders are paid via secure invoice after confirmation.'
   },
   'zh-CN': {
     logo: '阿琳手作',
@@ -107,7 +108,8 @@ export const translations = {
     selected: '已选择',
     priceTBD: '定制报价｜根据需求单独确认',
     contactForQuote: '联系获取报价',
-    basePrice: '基础价格'
+    basePrice: '基础价格',
+    securePayment: '定制玩偶需确认后通过安全发票支付。'
   },
   'zh-TW': {
     logo: '阿琳手作',
@@ -1112,7 +1114,8 @@ export function getText(locale: string, key: string) {
     size: locale.startsWith('zh') ? '尺寸' : 'Size',
     color: locale.startsWith('zh') ? '颜色' : 'Color',
     digitalNote: locale.startsWith('zh') ? '购买后您将收到PDF下载链接' : 'You will receive a download link after purchase',
-    customizeNow: locale.startsWith('zh') ? '联系定制' : 'Customize Now'
+    customizeNow: locale.startsWith('zh') ? '联系定制' : 'Customize Now',
+    securePayment: locale.startsWith('zh') ? '定制玩偶需确认后通过安全发票支付。' : 'Custom orders are paid via secure invoice after confirmation.'
   };
   return defaults[key] || key;
 }
