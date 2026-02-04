@@ -53,6 +53,15 @@ const canonicalURL = `https://alincraft.com${Astro.url.pathname.replace(/\/$/, '
     "paymentAccepted": "PayPal, Etsy",
     "currenciesAccepted": "USD, CNY"
   })} />
+  
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MMM9V568CN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-MMM9V568CN');
+  </script>
 </head>
 <body>
   <slot />

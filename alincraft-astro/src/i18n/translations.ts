@@ -52,7 +52,8 @@ export const translations = {
     selected: 'Selected',
     priceTBD: 'Custom Quote',
     contactForQuote: 'Contact for quote',
-    basePrice: 'Starting from'
+    basePrice: 'Starting from',
+    securePayment: 'Custom orders are paid via secure invoice after confirmation.'
   },
   'zh-CN': {
     logo: '阿琳手作',
@@ -107,7 +108,8 @@ export const translations = {
     selected: '已选择',
     priceTBD: '定制报价｜根据需求单独确认',
     contactForQuote: '联系获取报价',
-    basePrice: '基础价格'
+    basePrice: '基础价格',
+    securePayment: '定制玩偶需确认后通过安全发票支付。'
   },
   'zh-TW': {
     logo: '阿琳手作',
@@ -187,7 +189,7 @@ export const translations = {
         content: [
           '愛するペットが旅立った時、彼らが残した温かな思い出は永遠に保存されるべきです。',
           'Alin Handcraftはカスタムペットメモリアルトイを提供します。写真や説明に基づいて、ペットの姿を永遠に捉えるユニークな編みぐるみを制作します。',
-          'すべてのメモリアルトイは愛と思い出を載せており、自分への慰め，也是家人への温かな贈り物です。'
+          'すべてのメモリアルトイは愛と思い出を載せており、自分への慰め、ご家族への温かな贈り物です。'
         ],
         cta: 'お問い合わせ'
       },
@@ -203,7 +205,7 @@ export const translations = {
         title: 'お問い合わせ',
         address: '上海（詳細はお問い合わせください）',
         wechat: 'WeChat / WeChat: alinhandwork',
-        cta: 'ワークショップのご予約やカスタムご注文，欢迎',
+        cta: 'ワークショップのご予約やカスタムご注文も歓迎',
         etsy: 'Etsy: amigucustom.etsy.com →'
       }
     },
@@ -827,7 +829,7 @@ export const translations = {
         'Selamat datang di Alin Handcraft, tempat yang lahir dari "kelambatan" dan didedikasikan untuk "fokus".',
         'A-Lin, pendiri studio ini, tumbuh tenang di kota kelahirannya di Chaoshan.',
         'Kakeknya, yang kini berusia delapan puluhan, masih bertahan dengan sulaman manik-manik Chaoshan.',
-        'Itulah kepastian diam yang diajarkannya sejak dini: kerajinan bukan hanya tumpukan teknik, melainkan cara让 hati beristirahat.',
+        'Itulah kepastian diam yang diajarkannya sejak dini: kerajinan bukan hanya tumpukan teknik, melainkan cara agar hati beristirahat.',
         'Membawa ketenangan yang diwariskan ini, A-Lin menemukan jalannya menuju rajut.',
         'Hari ini, studio ini tiba di Shanghai. Di kota yang menghargai efisiensi, A-Lin ingin menawarkan sudut "kontra-efisiensi".',
         'Kehangatan sejati bukan tentang seberapa cepat Anda menciptakan, tetapi berapa lama Anda bersedia bertahan.'
@@ -1112,7 +1114,8 @@ export function getText(locale: string, key: string) {
     size: locale.startsWith('zh') ? '尺寸' : 'Size',
     color: locale.startsWith('zh') ? '颜色' : 'Color',
     digitalNote: locale.startsWith('zh') ? '购买后您将收到PDF下载链接' : 'You will receive a download link after purchase',
-    customizeNow: locale.startsWith('zh') ? '联系定制' : 'Customize Now'
+    customizeNow: locale.startsWith('zh') ? '联系定制' : 'Customize Now',
+    securePayment: locale.startsWith('zh') ? '定制玩偶需确认后通过安全发票支付。' : 'Custom orders are paid via secure invoice after confirmation.'
   };
   return defaults[key] || key;
 }
