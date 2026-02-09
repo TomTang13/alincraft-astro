@@ -9,6 +9,10 @@ interface Props {
 const { title, description = '阿琳手作工作室 - 手工编织玩偶专卖店', lang = 'zh', image = '/images/og-default.jpg' } = Astro.props;
 const currentLang = lang;
 const canonicalURL = `https://alincraft.com${Astro.url.pathname.replace(/\/$/, '')}`;
+
+// SEO 策略: 只索引主语言 (en)，其他语言 noindex
+const isMainLanguage = currentLang === 'en';
+const mainLanguageURL = isMainLanguage ? canonicalURL : `https://alincraft.com${Astro.url.pathname.replace(/\/[a-z]{2}(-[A-Z]{2})?\//, '/en/').replace(/\/$/, '')}`;
 ---
 
 <!doctype html>
@@ -20,6 +24,16 @@ const canonicalURL = `https://alincraft.com${Astro.url.pathname.replace(/\/$/, '
   <meta name="description" content={description}>
   <link rel="icon" type="image/jpeg" href="/favicon.jpg">
   <link rel="canonical" href={canonicalURL}>
+  
+  {/* SEO: 主语言索引，其他语言 noindex */}
+  {isMainLanguage ? (
+    <>
+      <meta name="robots" content="index, follow" />
+      <link rel="alternate" hreflang="x-default" href={mainLanguageURL} />
+    </>
+  ) : (
+    <meta name="robots" content="noindex, follow" />
+  )}
   
   <!-- Open Graph -->
   <meta property="og:title" content={title}>
