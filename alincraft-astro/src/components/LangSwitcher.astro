@@ -40,24 +40,32 @@ const locales = Object.keys(langNames);
     const path = window.location.pathname;
     
     // 直接从URL提取当前语言
-    const match = path.match(/^\/([a-z]{2}(-[A-Z]{2})?)\//);
+    const match = path.match(/^\/([a-z]{2}(-[A-Z]{2})?)\/?/);
     let currentLang = match ? match[1] : 'en';
     let cleanPath = path;
     
-    // 去掉当前语言前缀
+    // 去掉当前语言前缀，确保不留下双斜杠
     if (currentLang === 'en') {
-      cleanPath = path.replace(/^\/en\//, '/');
+      cleanPath = path.replace(/^\/en\/?/, '/');
     } else {
-      cleanPath = path.replace(/^\/[a-z]{2}(-[A-Z]{2})?\//, '/');
+      cleanPath = path.replace(/^\/[a-z]{2}(-[A-Z]{2})?\/?/, '/');
+    }
+    
+    // 确保路径不以斜杠开头（除了根路径）
+    if (cleanPath !== '/' && !cleanPath.startsWith('/')) {
+      cleanPath = '/' + cleanPath;
     }
     
     // 构建新路径
     let newPath;
     if (newLocale === 'en') {
-      newPath = cleanPath === '/' ? '/' : `/en${cleanPath}`;
+      newPath = cleanPath === '/' ? '/en/' : `/en${cleanPath}`;
     } else {
-      newPath = `/${newLocale}${cleanPath}`;
+      newPath = cleanPath === '/' ? `/${newLocale}/` : `/${newLocale}${cleanPath}`;
     }
+    
+    // 防止双斜杠
+    newPath = newPath.replace(/\/\//g, '/');
     
     // 跳转
     window.location.href = newPath;
